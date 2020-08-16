@@ -7,11 +7,12 @@ using UnityEngine.SceneManagement;
 
 public class gameControler : MonoBehaviour
 {
-    public GameObject heart1, heart2;
+    public GameObject heart1, heart2, golden1, golden2, golden3;
     public TextMeshProUGUI deadText;
-    public int health;
+    public int health, goldenTaken;
     public GameObject Frog;
     public GameObject pedoSound;
+    //public SpriteRenderer golden1;
 
 
 
@@ -24,11 +25,20 @@ public class gameControler : MonoBehaviour
         heart2.gameObject.SetActive(true);
         deadText.gameObject.SetActive(false);
 
+        goldenTaken = 0;
+        golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (health > 4)
             health = 4;
 
@@ -60,6 +70,36 @@ public class gameControler : MonoBehaviour
         if (health == 0)
         {
             gameObject.GetComponent<AudioSource>().enabled = true;
+        }
+
+        if (goldenTaken > 6)
+            goldenTaken = 6;
+
+        switch (goldenTaken)
+        {
+            case 0:
+                golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                break;
+
+            case 2:
+                golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                break;
+
+            case 4:
+                golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                break;
+
+            case 6:
+                golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                break;
         }
     }
 
