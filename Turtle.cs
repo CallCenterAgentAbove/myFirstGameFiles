@@ -6,13 +6,14 @@ public class Turtle : MonoBehaviour
 {
     private float distanceToEnemy;
     public GameObject characterToChange;
-    public GameObject Player;
+    //public GameObject Player;
+    public gameControler gameControler;
     private float killDistance = 1.5f;
     // Start is called before the first frame update
 
     private void FixedUpdate()
     {
-        distanceToEnemy = Vector2.Distance(characterToChange.transform.position, Player.transform.position);
+        distanceToEnemy = Vector2.Distance(characterToChange.transform.position, gameControler.Character.transform.position);
 
         if (distanceToEnemy <= killDistance)
         {

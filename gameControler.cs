@@ -4,19 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class gameControler : MonoBehaviour
 {
-    public GameObject heart1, heart2, golden1, golden2, golden3;
+    public Rigidbody2D Character;
+    public GameObject heart1, heart2, golden1, golden2, golden3, pedoSound, jumpsound, tile2Level, tile3Level;
+    public int health, goldenTaken, yVel;
+    public float xmovement;
     public TextMeshProUGUI deadText;
-    public int health, goldenTaken;
-    public GameObject Frog;
-    public GameObject pedoSound;
-    //public SpriteRenderer golden1;
+    public FloorChecker floorChecker;
+    public bool jumpingMode;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         health = 4;
@@ -26,9 +25,20 @@ public class gameControler : MonoBehaviour
         deadText.gameObject.SetActive(false);
 
         goldenTaken = 0;
+        //1, 1, 1, 0.5f although we are modifying a 0-255 color range, the only way the script can make changes in sprite colors is from 0-1, just do the math
         golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
         golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
         golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+
+        //second level tilemap should be false at the very beginning
+        tile2Level.GetComponent<Rigidbody2D>().tag = "Untagged";
+        tile2Level.GetComponent<CompositeCollider2D>().isTrigger = true;
+        tile2Level.GetComponent<TilemapCollider2D>().enabled = false;
+
+        tile3Level.GetComponent<Rigidbody2D>().tag = "Untagged";
+        tile3Level.GetComponent<CompositeCollider2D>().isTrigger = true;
+        tile3Level.GetComponent<TilemapCollider2D>().enabled = false;
+
 
 
 
@@ -38,7 +48,7 @@ public class gameControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //this little part limits health from reaching 5
         if (health > 4)
             health = 4;
 
@@ -61,14 +71,16 @@ public class gameControler : MonoBehaviour
             case 0:
                 heart1.gameObject.SetActive(false);
                 heart2.gameObject.SetActive(false);
-                Frog.GetComponent<Animator>().SetBool("hit", true);
+                Character.GetComponent<Animator>().SetBool("hit", true);
                 deadText.gameObject.SetActive(true);
+                //Instantiate(pedoSound) 
                 Invoke("ResetScene", 1.2f);
                 break;
         }
 
         if (health == 0)
         {
+            //getcomponent instad of instantiate, inst makes pedoSound sound many times at the same time
             gameObject.GetComponent<AudioSource>().enabled = true;
         }
 
@@ -101,11 +113,103 @@ public class gameControler : MonoBehaviour
                 golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 break;
         }
+
+        if (Character.transform.position.y >= 0.05f)
+        {
+            tile2Level.GetComponent<TilemapCollider2D>().enabled = true;
+            tile2Level.GetComponent<CompositeCollider2D>().isTrigger = false;
+            Invoke("TileTagLevel2", 0.1f);
+
+            if (Character.transform.position.y >= 0.813)
+            {
+                tile3Level.GetComponent<TilemapCollider2D>().enabled = true;
+                tile3Level.GetComponent<CompositeCollider2D>().isTrigger = false;
+                Invoke("TileTagLevel3", 0.1f);
+            }
+
+            else
+            {
+                tile3Level.GetComponent<CompositeCollider2D>().isTrigger = true;
+                tile3Level.GetComponent<TilemapCollider2D>().enabled = false;
+                tile3Level.GetComponent<Rigidbody2D>().tag = "Untagged";
+            }
+
+        }
+
+        else
+        {
+            tile2Level.GetComponent<CompositeCollider2D>().isTrigger = true;
+            tile2Level.GetComponent<TilemapCollider2D>().enabled = false;
+            tile2Level.GetComponent<Rigidbody2D>().tag = "Untagged";
+
+
+        }
     }
 
+    void FixedUpdate()
+    {
+        if (Input.GetKey("a"))
+        {
+            Character.GetComponent<SpriteRenderer>().flipX = true;
+            Character.transform.position = new Vector2(Character.transform.position.x + -xmovement * Time.deltaTime, Character.transform.position.y);
+            Character.GetComponent<Animator>().SetBool("Run", true);
+            Character.GetComponent<Animator>().SetBool("idle", false);
+
+            if (!floorChecker.OnGround)
+            {
+                Character.GetComponent<Animator>().SetBool("Run", false);
+                //Frog.GetComponent<Animator>().SetBool("onTheAir", true);
+            }
+        }
+
+        else if (Input.GetKey("d"))
+        {
+            Character.GetComponent<SpriteRenderer>().flipX = false;
+            Character.transform.position = new Vector2(Character.transform.position.x + xmovement * Time.deltaTime, Character.transform.position.y);
+            Character.GetComponent<Animator>().SetBool("Run", true);
+            Character.GetComponent<Animator>().SetBool("idle", false);
+
+            if (!floorChecker.OnGround)
+            {
+                Character.GetComponent<Animator>().SetBool("Run", false);
+                //Frog.GetComponent<Animator>().SetBool("onTheAir", true);
+            }
+        }
+
+
+        else
+        {
+            //Frog.transform.position = new Vector2(Frog.transform.position.x + 0, Frog.transform.position.y + 0);
+            Character.GetComponent<Animator>().SetBool("idle", true);
+            Character.GetComponent<Animator>().SetBool("Run", false);
+        }
+
+        if (Input.GetKey("w") && floorChecker.OnGround || jumpingMode && floorChecker.OnGround) // || !floorChecker.OnGround && floorChecker.killed
+        {
+            Character.velocity = new Vector2(0, yVel);
+            //Frog.GetComponent<AudioSource>().enabled = true; 
+            Instantiate(jumpsound);
+            Character.GetComponent<Animator>().SetBool("onTheAir", true);
+        }
+
+        if (floorChecker.OnGround)
+        {
+            Character.GetComponent<Animator>().SetBool("idle", true);
+            Character.GetComponent<Animator>().SetBool("onTheAir", false);
+        }
+    }
     private void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
+    private void TileTagLevel2()
+    {
+        tile2Level.GetComponent<Rigidbody2D>().tag = "jumpSurface";
+    }
+
+    private void TileTagLevel3()
+    {
+        tile3Level.GetComponent<Rigidbody2D>().tag = "jumpSurface";
     }
 }
