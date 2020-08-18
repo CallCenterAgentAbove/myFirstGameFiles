@@ -10,7 +10,8 @@ public class goldenTaken : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            gameControler.goldenTaken = gameControler.goldenTaken += 1;
+            //gameControler.goldenTaken = gameControler.goldenTaken += 1;
+            gameControler.GoldeTaken();
             //gameObject.SetActive(false);
 
         }

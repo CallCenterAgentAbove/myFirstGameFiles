@@ -17,7 +17,9 @@ public class FrogMovement : MonoBehaviour
     {
         if (collision.CompareTag("Killed"))
         {
-            gameControler.health = gameControler.health -= 1;
+            //gameControler.health = gameControler.health -= 1;
+            //Invoke("LessHealth", 0f);
+            gameControler.LessHealth();
             gameObject.transform.position = new Vector2(gameObject.transform.position.x - 0.2f, gameObject.transform.position.y);
 
         }

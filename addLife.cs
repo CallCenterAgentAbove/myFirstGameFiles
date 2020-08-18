@@ -6,7 +6,6 @@ public class addLife : MonoBehaviour
 {
     public gameControler gameControler;
 
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -16,7 +15,8 @@ public class addLife : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            gameControler.health = gameControler.health += 1;
+            //gameControler.health = gameControler.health += 1;
+            gameControler.PlusHealth();
             //gameObject.SetActive(false);
 
         }

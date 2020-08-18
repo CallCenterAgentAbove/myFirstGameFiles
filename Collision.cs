@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
-    public GameObject collectionSound;
-
+    public gameControler gameControler;
+    [SerializeField] private GameObject coinSound;
     private void Start()
     {
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -15,13 +15,12 @@ public class Collision : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-               
+            //gameControler.CollectedBoxCollider2D();
             GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
             gameObject.transform.GetChild(0).gameObject.SetActive(true);
-            Instantiate(collectionSound);
+            Instantiate(coinSound);
             Destroy(gameObject, 0.5f);
-
         }
     }
 

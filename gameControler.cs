@@ -9,13 +9,14 @@ using UnityEngine.Tilemaps;
 public class gameControler : MonoBehaviour
 {
     public Rigidbody2D Character;
-    public GameObject heart1, heart2, golden1, golden2, golden3, pedoSound, jumpsound, tile2Level, tile3Level;
-    public int health, goldenTaken, yVel;
+    [SerializeField] private GameObject heart1, heart2, golden1, golden2, golden3, pedoSound, jumpsound, tile2Level, tile3Level, coinSound;
+    public int yVel;
+    [SerializeField] private float health, goldenTaken;
     public float xmovement;
     public TextMeshProUGUI deadText;
     public FloorChecker floorChecker;
     public bool jumpingMode;
-
+    
     void Start()
     {
         health = 4;
@@ -211,5 +212,26 @@ public class gameControler : MonoBehaviour
     private void TileTagLevel3()
     {
         tile3Level.GetComponent<Rigidbody2D>().tag = "jumpSurface";
+    }
+
+    public void PlusHealth()
+    {
+        health++;
+        Debug.Log("mi salud es 4");
+    }
+
+    public void LessHealth()
+    {
+        health--;
+    }
+
+    public void GoldeTaken()
+    {
+        goldenTaken++;
+    }
+
+    public void CollectedBoxCollider2D()
+    {
+        
     }
 }
