@@ -7,12 +7,12 @@ using TMPro;
 
 public class fruitCounter : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI fruitText;
     public int fruits;
 
     // Update is called once per frame
     void Update()
     {
-        text.text = "Fruits " + fruits.ToString() + "/50";
+        fruitText.text = "Fruits " + fruits.ToString() + "/50";
     }
 }

@@ -10,10 +10,10 @@ public class gameControler : MonoBehaviour
 {
     public Rigidbody2D Character;
     [SerializeField] private GameObject heart1, heart2, golden1, golden2, golden3, pedoSound, jumpsound, tile2Level, tile3Level, coinSound;
-    public int yVel;
+    public int yVel, coins, fruits;
     [SerializeField] private float health, goldenTaken;
     public float xmovement;
-    public TextMeshProUGUI deadText;
+    public TextMeshProUGUI deadText, fruitText, coinsText;
     public FloorChecker floorChecker;
     public bool jumpingMode;
     
@@ -49,6 +49,12 @@ public class gameControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //for coins counter text
+        coinsText.text = "Coins  " + coins.ToString() + "/100";
+        //for fuit counter text
+        fruitText.text = "Fruits " + fruits.ToString() + "/50";
+
+
         //this little part limits health from reaching 5
         if (health > 4)
             health = 4;
@@ -85,8 +91,8 @@ public class gameControler : MonoBehaviour
             gameObject.GetComponent<AudioSource>().enabled = true;
         }
 
-        if (goldenTaken > 6)
-            goldenTaken = 6;
+        if (goldenTaken > 3)
+            goldenTaken = 3;
 
         switch (goldenTaken)
         {
@@ -96,19 +102,19 @@ public class gameControler : MonoBehaviour
                 golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 break;
 
-            case 2:
+            case 1:
                 golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 break;
 
-            case 4:
+            case 2:
                 golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 break;
 
-            case 6:
+            case 3:
                 golden1.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 golden2.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
                 golden3.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
@@ -216,7 +222,7 @@ public class gameControler : MonoBehaviour
 
     public void PlusHealth()
     {
-        health++;
+        health += 2;
         Debug.Log("mi salud es 4");
     }
 
@@ -228,10 +234,27 @@ public class gameControler : MonoBehaviour
     public void GoldeTaken()
     {
         goldenTaken++;
+        //Instantiate(coinSound);
     }
 
     public void CollectedBoxCollider2D()
     {
         
     }
+
+    public void ScriptPopping()
+    {
+        
+    }
+
+    public void FruitTaken()
+    {
+        fruits++;
+    }
+
+    public void CoinTaken()
+    {
+        coins++;
+    }
+
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
-    public gameControler gameControler;
+    //public gameControler gameControler;
     [SerializeField] private GameObject coinSound;
     private void Start()
     {
@@ -21,6 +21,14 @@ public class Collision : MonoBehaviour
             gameObject.transform.GetChild(0).gameObject.SetActive(true);
             Instantiate(coinSound);
             Destroy(gameObject, 0.5f);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+
         }
     }
 
