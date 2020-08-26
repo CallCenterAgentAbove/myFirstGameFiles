@@ -16,5 +16,15 @@ public class itemCounter : MonoBehaviour
         {
             gameControler.CoinTaken();
         }
+
+        if (collision.CompareTag("rightKilled"))
+        {
+            gameControler.LessHealth();
+        }
+
+        if (collision.CompareTag("leftKilled"))
+        {
+            gameControler.LessHealth();
+        }
     }
 }

@@ -11,14 +11,14 @@ public class character : MonoBehaviour
     {
         if (collision.CompareTag("leftKilled"))
         {
-            gameControler.LessHealth();
+            //gameControler.LessHealth();
             gameObject.transform.position = new Vector2(gameObject.transform.position.x - 0.2f, gameObject.transform.position.y);
 
         }
 
         if (collision.CompareTag("rightKilled"))
         {
-            gameControler.LessHealth();
+            //gameControler.LessHealth();
             gameObject.transform.position = new Vector2(gameObject.transform.position.x + 0.2f, gameObject.transform.position.y);
 
         }

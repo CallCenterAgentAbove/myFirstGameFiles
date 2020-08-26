@@ -4,31 +4,43 @@ using UnityEngine;
 
 public class enemyMovement : MonoBehaviour
 {
-    [SerializeField] public float xMovement, toJump;
-    public GameObject movingCharacter;
+    [SerializeField] public float xMovement, yVel, toJump;
+    public Rigidbody2D movingCharacter;
     public leftCheckMove leftCheckMove;
     public rightCheckMove rightCheckMove;
 
 
     private void Start()
     {
+        toJump = 0;
     }
     void Update()
     {
+        if (toJump > 9)
+        {
+            //movingCharacter.transform.position = new Vector2(movingCharacter.transform.position.x, movingCharacter.transform.position.y + 1);
+
+            movingCharacter.velocity = new Vector2(0, yVel);
+
+            toJump = 0;
+        }
 
         transform.position = new Vector3(transform.position.x - xMovement * Time.deltaTime, transform.position.y, transform.position.z);
 
         if (rightCheckMove.obstacleFront)
         {
-
             movingCharacter.GetComponent<SpriteRenderer>().flipX = false;
             xMovement = 0.2f;
+            toJump++;
+
         }
 
         if (leftCheckMove.obstacleBack)
         {
             movingCharacter.GetComponent<SpriteRenderer>().flipX = true;
             xMovement = -0.2f;
+            toJump++;
+
         }
 
 

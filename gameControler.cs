@@ -16,10 +16,10 @@ public class gameControler : MonoBehaviour
     public TextMeshProUGUI deadText, fruitText, coinsText;
     public FloorChecker floorChecker;
     public bool jumpingMode;
-    
+
     void Start()
     {
-        health = 4;
+        health = 2;
         heart1.GetComponent<Animator>().enabled = false;
         heart1.gameObject.SetActive(true);
         heart2.gameObject.SetActive(true);
@@ -56,20 +56,20 @@ public class gameControler : MonoBehaviour
 
 
         //this little part limits health from reaching 5
-        if (health > 4)
-            health = 4;
+        if (health > 2)
+            health = 2;
 
         switch (health)
         {
 
-            case 4:
+            case 2:
                 heart1.GetComponent<SpriteRenderer>().enabled = true;
                 heart1.GetComponent<Animator>().enabled = false;
                 heart1.gameObject.SetActive(true);
                 heart2.gameObject.SetActive(true);
                 deadText.gameObject.SetActive(false);
                 break;
-            case 2:
+            case 1:
                 heart1.GetComponent<Animator>().enabled = true;
                 heart1.gameObject.SetActive(true);
                 heart2.gameObject.SetActive(false);
@@ -239,12 +239,12 @@ public class gameControler : MonoBehaviour
 
     public void CollectedBoxCollider2D()
     {
-        
+
     }
 
     public void ScriptPopping()
     {
-        
+
     }
 
     public void FruitTaken()
