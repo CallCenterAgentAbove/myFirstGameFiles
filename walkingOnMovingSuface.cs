@@ -5,6 +5,7 @@ using UnityEngine;
 public class walkingOnMovingSuface : MonoBehaviour
 {
     public enemyMovement enemyMovement;
+    public bool onGround;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,11 @@ public class walkingOnMovingSuface : MonoBehaviour
             enemyMovement.xMovement = 0.2f;
             enemyMovement.movingCharacter.velocity = new Vector2(0, enemyMovement.yVel);
         }
+
+        if (collision.CompareTag("jumpSurface"))
+        {
+            onGround = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -34,5 +40,13 @@ public class walkingOnMovingSuface : MonoBehaviour
             enemyMovement.xMovement = enemyMovement.xMovement + 0.1f;
 
         }
+
+        if (collision.CompareTag("jumpSurface"))
+        {
+            onGround = false;
+        }
     }
+
+
+
 }

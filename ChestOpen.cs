@@ -7,19 +7,25 @@ using UnityEngine;
 public class ChestOpen : MonoBehaviour
 {
     private float distanceToPlayer;
-    public FrogMovement theFrog;
-    public GameObject chest;
+    public gameControler gameControler;
     private float distanceToOpen = 0.3f;
 
 
     private void Update()
     {
-        distanceToPlayer = Vector2.Distance(chest.transform.position, theFrog.transform.position);
+        distanceToPlayer = Vector2.Distance(gameObject.transform.position, gameControler.Character.transform.position);
 
         if (distanceToPlayer <= distanceToOpen)
         {
-            chest.GetComponent<Animator>().enabled = true;
+            gameObject.GetComponent<Animator>().enabled = true;
+            Invoke("StopAnim", 1f);
         }
+    }
+
+    void StopAnim()
+    {
+        gameObject.GetComponent<Animator>().enabled = false;
+        gameObject.GetComponent<ChestOpen>().enabled = false;
     }
 
 

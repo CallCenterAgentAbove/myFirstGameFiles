@@ -6,7 +6,6 @@ using UnityEngine;
 public class leftCheckMove : MonoBehaviour
 {
     public bool obstacleBack;
-    public gameControler gameControler;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -16,11 +15,6 @@ public class leftCheckMove : MonoBehaviour
             //xMovement = xMovement;
 
         }
-
-        //if (collision.CompareTag("Player"))
-        //{
-        //   gameControler.vidas = gameControler.vidas - 1;
-        //}
     }
 
     private void OnTriggerExit2D(Collider2D collision)

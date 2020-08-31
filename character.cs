@@ -9,21 +9,20 @@ public class character : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("leftKilled"))
-        {
-            //gameControler.LessHealth();
-            gameObject.transform.position = new Vector2(gameObject.transform.position.x - 0.2f, gameObject.transform.position.y);
-
-        }
-
         if (collision.CompareTag("rightKilled"))
         {
-            //gameControler.LessHealth();
+            gameControler.LessHealth();
             gameObject.transform.position = new Vector2(gameObject.transform.position.x + 0.2f, gameObject.transform.position.y);
 
         }
 
-        
+        if (collision.CompareTag("leftKilled"))
+        {
+            gameControler.LessHealth();
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x - 0.2f, gameObject.transform.position.y);
+        }
+
+
 
     }
 }

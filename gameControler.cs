@@ -10,16 +10,18 @@ public class gameControler : MonoBehaviour
 {
     public Rigidbody2D Character;
     [SerializeField] private GameObject heart1, heart2, golden1, golden2, golden3, pedoSound, jumpsound, tile2Level, tile3Level, coinSound;
-    public int yVel, coins, fruits;
+    public int yVel, xVel, coins, fruits;
     [SerializeField] private float health, goldenTaken;
     public float xmovement;
     public TextMeshProUGUI deadText, fruitText, coinsText;
     public FloorChecker floorChecker;
+    public leftWallJump leftWallJump;
+    public rightWallJump rightWallJump;
     public bool jumpingMode;
 
     void Start()
     {
-        health = 2;
+        health = 4;
         heart1.GetComponent<Animator>().enabled = false;
         heart1.gameObject.SetActive(true);
         heart2.gameObject.SetActive(true);
@@ -41,9 +43,6 @@ public class gameControler : MonoBehaviour
         tile3Level.GetComponent<TilemapCollider2D>().enabled = false;
 
 
-
-
-
     }
 
     // Update is called once per frame
@@ -56,20 +55,20 @@ public class gameControler : MonoBehaviour
 
 
         //this little part limits health from reaching 5
-        if (health > 2)
-            health = 2;
+        if (health > 4)
+            health = 4;
 
         switch (health)
         {
 
-            case 2:
+            case 4:
                 heart1.GetComponent<SpriteRenderer>().enabled = true;
                 heart1.GetComponent<Animator>().enabled = false;
                 heart1.gameObject.SetActive(true);
                 heart2.gameObject.SetActive(true);
                 deadText.gameObject.SetActive(false);
                 break;
-            case 1:
+            case 2:
                 heart1.GetComponent<Animator>().enabled = true;
                 heart1.gameObject.SetActive(true);
                 heart2.gameObject.SetActive(false);
@@ -127,7 +126,7 @@ public class gameControler : MonoBehaviour
             tile2Level.GetComponent<CompositeCollider2D>().isTrigger = false;
             Invoke("TileTagLevel2", 0.1f);
 
-            if (Character.transform.position.y >= 0.813)
+            if (Character.transform.position.y >= 0.75)
             {
                 tile3Level.GetComponent<TilemapCollider2D>().enabled = true;
                 tile3Level.GetComponent<CompositeCollider2D>().isTrigger = false;
@@ -155,55 +154,126 @@ public class gameControler : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 fixedVelocity = Character.velocity;
+        fixedVelocity.x *= 0.7f;
+
+
         if (Input.GetKey("a"))
         {
             Character.GetComponent<SpriteRenderer>().flipX = true;
-            Character.transform.position = new Vector2(Character.transform.position.x + -xmovement * Time.deltaTime, Character.transform.position.y);
+            Character.transform.position = new Vector2(Character.transform.position.x + -xmovement, Character.transform.position.y);
             Character.GetComponent<Animator>().SetBool("Run", true);
             Character.GetComponent<Animator>().SetBool("idle", false);
+
+            /*if (leftWallJump.wallJumpLeft)
+            {
+                Character.GetComponent<Animator>().SetBool("onLeftJump", true);
+                Character.GetComponent<Animator>().SetBool("Run", false);
+
+                *//*if (Input.GetKey("w") && !floorChecker.OnGround)
+                {
+                    Character.velocity = new Vector2(xVel, yVel);
+
+                }*//*
+            }*/
+
 
             if (!floorChecker.OnGround)
             {
                 Character.GetComponent<Animator>().SetBool("Run", false);
-                //Frog.GetComponent<Animator>().SetBool("onTheAir", true);
+
             }
         }
 
         else if (Input.GetKey("d"))
         {
             Character.GetComponent<SpriteRenderer>().flipX = false;
-            Character.transform.position = new Vector2(Character.transform.position.x + xmovement * Time.deltaTime, Character.transform.position.y);
+            Character.transform.position = new Vector2(Character.transform.position.x + xmovement, Character.transform.position.y);
             Character.GetComponent<Animator>().SetBool("Run", true);
             Character.GetComponent<Animator>().SetBool("idle", false);
+
+            // dont remove, this is for the wall jump
+            /*if (rightWallJump.wallJumpRight)
+            {
+                Character.GetComponent<Animator>().SetBool("onRightJump", true);
+                Character.GetComponent<Animator>().SetBool("Run", false);
+            }*/
 
             if (!floorChecker.OnGround)
             {
                 Character.GetComponent<Animator>().SetBool("Run", false);
-                //Frog.GetComponent<Animator>().SetBool("onTheAir", true);
             }
         }
 
 
         else
         {
-            //Frog.transform.position = new Vector2(Frog.transform.position.x + 0, Frog.transform.position.y + 0);
             Character.GetComponent<Animator>().SetBool("idle", true);
             Character.GetComponent<Animator>().SetBool("Run", false);
         }
 
-        if (Input.GetKey("w") && floorChecker.OnGround || jumpingMode && floorChecker.OnGround) // || !floorChecker.OnGround && floorChecker.killed
+        if (Input.GetKey("w") && floorChecker.OnGround || jumpingMode && floorChecker.OnGround) 
         {
             Character.velocity = new Vector2(0, yVel);
-            //Frog.GetComponent<AudioSource>().enabled = true; 
             Instantiate(jumpsound);
             Character.GetComponent<Animator>().SetBool("onTheAir", true);
+
         }
 
-        if (floorChecker.OnGround)
+        if (Input.GetKey("w") && Input.GetKey("a") && floorChecker.OnGround && leftWallJump.wallJumpLeft)
         {
+            Character.velocity = new Vector2(0, yVel + 0.6f);
+
+        }
+
+        if (Input.GetKey("w") && Input.GetKey("d") && floorChecker.OnGround && rightWallJump.wallJumpRight)
+        {
+            Character.velocity = new Vector2(0, yVel + 0.6f);
+
+        }
+
+
+
+        if (floorChecker.OnGround && !(Input.GetKey("w")))
+        {
+            Character.velocity = fixedVelocity;
             Character.GetComponent<Animator>().SetBool("idle", true);
             Character.GetComponent<Animator>().SetBool("onTheAir", false);
         }
+
+        // dont remove, this is for the wall jump
+
+        /*if (floorChecker.OnGround)
+        {
+            Character.GetComponent<Animator>().SetBool("onLeftJump", false);
+            Character.GetComponent<Animator>().SetBool("onRightJump", false);
+
+        }
+
+        if (!floorChecker.OnGround && !leftWallJump.wallJumpLeft)
+        {
+            Character.GetComponent<Animator>().SetBool("onLeftJump", false);
+
+        }
+
+        if (!floorChecker.OnGround && !rightWallJump.wallJumpRight)
+        {
+            Character.GetComponent<Animator>().SetBool("onRightJump", false);
+
+        }*/
+
+        if (!floorChecker.OnGround)
+        {
+            Character.velocity = fixedVelocity;
+
+        }
+
+        //dont remove, this is for the wall jump
+        /*if (!floorChecker.OnGround && rightWallJump.wallJumpRight && Input.GetKey("d") && Input.GetKey("w"))
+        {
+
+            Character.velocity = new Vector2(-10, 3);
+        }*/
     }
     private void ResetScene()
     {
@@ -257,4 +327,5 @@ public class gameControler : MonoBehaviour
         coins++;
     }
 
+ 
 }

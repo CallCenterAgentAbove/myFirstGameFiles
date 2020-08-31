@@ -7,7 +7,6 @@ public class FloorChecker : MonoBehaviour
 {
     public bool  OnGround;
     //public bool killed;
-    public gameControler gameControler;
     public GameObject jumpSound;
     //public CharacterMovement characterMovement;
 
@@ -25,7 +24,6 @@ public class FloorChecker : MonoBehaviour
 
         if (collision.CompareTag("enemy"))
         {
-            gameControler.Character.velocity = new Vector2(0, gameControler.yVel);
             Instantiate(jumpSound);
             //killed = true;
         }

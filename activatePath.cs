@@ -24,7 +24,7 @@ public class activatePath : MonoBehaviour
     {
         distanceToPlayer = Vector2.Distance(gameObject.transform.position, gameControler.Character.transform.position);
 
-        if (distanceToPlayer <= 3.7)
+        if (distanceToPlayer <= 3.4)
         {
             gameObject.GetComponent<AIPath>().enabled = true;
             //gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(1f, -1f, 1f);
@@ -38,7 +38,10 @@ public class activatePath : MonoBehaviour
             gameObject.GetComponent<AIPath>().enabled = false;
             gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
             //gameObject.transform.GetChild(0).gameObject.transform.position = initialPos;
-            gameObject.transform.position = initialPos;
+            //gameObject.transform.position = initialPos;
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+            //gameObject.transform.rotation = new Vector3(1f, 1f, 1f);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, initialPos, 0.5f * Time.deltaTime);
 
         }
     }

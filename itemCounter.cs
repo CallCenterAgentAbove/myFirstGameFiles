@@ -17,14 +17,17 @@ public class itemCounter : MonoBehaviour
             gameControler.CoinTaken();
         }
 
-        if (collision.CompareTag("rightKilled"))
+        /*if (collision.CompareTag("rightKilled"))
         {
             gameControler.LessHealth();
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x + 0.2f, gameObject.transform.position.y);
+
         }
 
         if (collision.CompareTag("leftKilled"))
         {
             gameControler.LessHealth();
-        }
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x - 0.2f, gameObject.transform.position.y);
+        }*/
     }
 }

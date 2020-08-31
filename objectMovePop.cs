@@ -11,7 +11,9 @@ public class objectMovePop : MonoBehaviour
 
     void Start()
     {
-       gameObject.GetComponent<enemyMovement>().enabled = false;
+
+        gameObject.GetComponent<enemyMovement>().enabled = false;
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         //gameObject.SetActive(false);
 
     }
@@ -24,6 +26,8 @@ public class objectMovePop : MonoBehaviour
         if (distanceToActivateScript < 4)
         {
             gameObject.GetComponent<enemyMovement>().enabled = true;
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
             //gameObject.SetActive(true);
 
 
@@ -32,6 +36,8 @@ public class objectMovePop : MonoBehaviour
         else
         {
             gameObject.GetComponent<enemyMovement>().enabled = false;
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
             //gameObject.SetActive(false);
         }
 
